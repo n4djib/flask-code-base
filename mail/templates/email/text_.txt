@@ -1,0 +1,9 @@
+Dear, User
+
+This is a test link:
+
+{{ url }}
+
+Alternatively, you .................
+
+Sincerely

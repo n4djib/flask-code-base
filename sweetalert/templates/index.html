@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+	<!-- jQuery -->
+	<script src="{{ url_for('static', filename='bs/js/jquery.min.js') }}"></script>
+	<script src="{{ url_for('static', filename='bs/js/bootstrap.min.js') }}"></script>
+
+	<!-- bootstrap 3.3.7 -->
+    <script src="{{ url_for('static', filename='bootstrap3/js/bootstrap.min.js') }}"></script>
+    <link rel="stylesheet" type="text/css" 
+        href="{{ url_for('static', filename='bootstrap3/css/bootstrap.min.css') }}">
+    <!-- - -->
+
+
+</head>
+<body>
+
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        {% for category, message in messages %}
+            {% if category != 'message' %}
+                {% if category == 'success' %}
+                <div class="alert alert-success" role="alert">{{ message | safe }}</div>
+                {% else %}
+                <div class="alert {{ category }}" role="alert">{{ message | safe }}</div>
+                {% endif %}
+            {% else %}
+            <div class="alert alert-info" role="alert">{{ message | safe }}</div>
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+    {% endwith %}
+
+
+    </br>
+	<button id="sweet_modal" onclick="modal_create_session(8)">sweet modal</button>
+	</br></br></br>
+	<button onclick="modal_create_session(9)">sweet modal 2</button>
+
+
+	<script src="{{ url_for('static', filename='sweetalert2/sweetalert2@9.js') }}"></script>
+
+	<script>
+
+	function modal_create_session(promo_id) {
+
+		// var options = get_options(promo_id);
+		options = '<option value="2">2 - INFSPM/SF/S2 (Historic)</option>  <option value="3">3 - INFSPM/SF/S3 (Historic)</option>  <option value="4">4 - INFSPM/SF/S4 (Historic)</option>  <option value="9" selected="">9 - INFSPM/SF/S9</option>  <option value="10">10 - INFSPM/SF/S10</option>'
+
+		options = '<div style="margin: 10px;" class="row control-group">  <select class="form-control" id="modal_options_'+promo_id+'">  ' + options + '  </select> </div>';
+
+		Swal.queue([{
+		  title: 'create new session semester',
+		  confirmButtonText: 'create',
+		  text: 'session will be created via AJAX request',
+		  html: options,
+		  showLoaderOnConfirm: true,
+		  // cancelButtonAriaLabel: 'Thumbs down',
+		  preConfirm: () => {
+
+		  	// alert('eeeeeeeee');
+		  	// console.log('qqqqqqqqq');
+
+		  	select = $('#modal_options_'+promo_id);
+		  	semester_id = select.val();
+		  	// alert(p_id);
+
+		    return fetch("/sweet", {
+			    method: 'post',
+			    body: JSON.stringify({
+			    	'promo_id': promo_id, 
+			    	'semester_id': semester_id
+			    })
+		    }).then(response => response.json())
+		      .then((data) => {
+		      	// console.log('fetched');
+		      	// Swal.insertQueueStep(data.ip);
+		      	window.location.reload(false); 
+		      })
+		      .catch(() => {
+		        Swal.insertQueueStep({
+		          icon: 'error',
+		          title: 'Unable to create the Session',
+		          onClose: () => {
+				    window.location.reload(false); 
+				  }
+		      	});
+		      	// window.location.reload(false); 
+		    })
+
+		  } // preConfirm
+		}]);
+
+	}//function
+
+	</script>
+
+
+</body>
+</html>

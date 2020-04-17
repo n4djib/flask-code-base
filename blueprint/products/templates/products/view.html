@@ -1,0 +1,7 @@
+<h1>View in PRODUCTS template folder</h1>
+<a href="{{ url_for('index') }}">go to Home</a>
+<br/>
+<br/>
+<!-- <img src='assets/pretty.jpeg' /> -->
+<img src="{{ url_for('products_bp.static', filename='pretty.jpeg') }}" />
+
