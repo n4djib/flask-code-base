@@ -1,0 +1,18 @@
+waitress-serve --listen=*:8000 evaluation:app
+
+
+
+
+or
+
+
+= waitress_server.py
+
+from waitress import serve
+import app
+serve(app.app, host='0.0.0.0', port=8080)
+
+
+= RUN
+
+python waitress_server.py 
